@@ -5,13 +5,20 @@ using UnityEngine.UI;
 public partial class UILogin {
 	[Header("AuXtraUI Login Panel")]
 
-	public Color auXtraUiLoginBackgroundColor = new Color(0F, 0F, 0F, 0.65F);
 
 	public Color auXtraUiLoginNormalColor = new Color(0.9F, 0.8F, 0.7F, 1F);
 	public Color auXtraUiLoginHighlightedColor = new Color(0.8F, 0.7F, 0.6F, 1F);
 	public Color auXtraUiLoginPressedColor = new Color(0.8F, 0.7F, 0.6F, 1F);
+	public Color auXtraUiLoginBackgroundColor = new Color(0F, 0F, 0F, 0.65F);
 
 	//	public Sprite loginBgImage;
+
+	public void setBaseColors(Color AuXtraUiLoginNormalColor, Color  AuXtraUiLoginHighlightedColor, Color  AuXtraUiLoginPressedColor, Color  AuXtraUiLoginBackgroundColor){
+		auXtraUiLoginNormalColor = AuXtraUiLoginNormalColor;
+		auXtraUiLoginHighlightedColor = AuXtraUiLoginHighlightedColor;
+		auXtraUiLoginPressedColor = AuXtraUiLoginPressedColor;
+		auXtraUiLoginBackgroundColor = AuXtraUiLoginBackgroundColor;
+	}
 
 	void Update_AuXtraUiLogin() {
 		Image myImageComponent = panel.GetComponent<Image> ();

@@ -62,7 +62,7 @@ public static class auXtraUiExtensions
 		mImage.color = bgColor;
 	}
 
-    // Thanks to --> https://forum.unity.com/threads/changing-a-new-ui-images-alpha-value.289755/#post-2699525
+    // https://forum.unity.com/threads/changing-a-new-ui-images-alpha-value.289755/#post-2699525
 	public static void SetTransparency(UnityEngine.UI.Image p_image, float p_transparency)
 	{
 		if (p_image != null)
@@ -73,3 +73,4 @@ public static class auXtraUiExtensions
 		}
 	}
 }
+
