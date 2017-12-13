@@ -18,16 +18,16 @@ public class AuXtraUI : EditorWindow
 	Color auXtraUiPressedColor = new Color(0.8F, 0.7F, 0.6F, 1F);
 	Color auXtraUiBackgroundColor = new Color(0F, 0F, 0F, 0.65F);
 	bool auXtraUiEditAll = false;
+	bool updateLive = false;
 	public UILogin UILogin;
 	Texture2D aUimage;
-	public SceneAsset gameScene;
+
 	void Start() {
-		gameScene = AssetDatabase.LoadAssetAtPath<SceneAsset>("Assets/Artwork/mymodel.fbx");
 
 	}
 
 	// Add menu category "ADDon uMMORPG" and item named "Xtra UI" to the Window menu
-	[MenuItem("Window/ADDon uMMORPG/Xtra UI")]
+	[MenuItem("Window/ADDonU/uMMORPG/Xtra UI")]
 	public static void ShowWindow()
 	{
 		//Show existing window instance. If one doesn't exist, make one.
@@ -36,8 +36,16 @@ public class AuXtraUI : EditorWindow
 
 	void OnEnable()
 	{	
-		aUimage = Resources.Load("ADDon-uMMORPG", typeof(Texture2D)) as Texture2D;
-		OnHierarchyChange ();
+		aUimage = Resources.Load("ADDonU", typeof(Texture2D)) as Texture2D;
+
+		var all = Resources.FindObjectsOfTypeAll(typeof(UILogin));
+		if (all.Where (obj => (obj.hideFlags & HideFlags.HideInHierarchy) != HideFlags.HideInHierarchy).Count () == 1) {
+			UILogin = (UILogin)all[0];
+			auXtraUiNormalColor = UILogin.auXtraUiLoginNormalColor;
+			auXtraUiHighlightedColor = UILogin.auXtraUiLoginHighlightedColor;
+			auXtraUiPressedColor = UILogin.auXtraUiLoginPressedColor;
+			auXtraUiBackgroundColor = UILogin.auXtraUiLoginBackgroundColor;
+		}
 	}
 
 
@@ -49,18 +57,23 @@ public class AuXtraUI : EditorWindow
 			UILogin = (UILogin)all[0];
 		}
 
-//		UILogin AuUILogin = (UILogin) gameScene.FindObjectOfType(typeof(UILogin));
 	}
 	void OnGUI()
 	{
-		GUILayout.Label (aUimage);
 
-		UILogin = EditorGUILayout.ObjectField ("UILogin GameObject", UILogin, typeof(UILogin)) as UILogin;
+
+		var centeredStyle = GUI.skin.GetStyle("Label");
+		centeredStyle.alignment = TextAnchor.UpperCenter;
+
+		GUILayout.Label (aUimage, centeredStyle);
+
+		updateLive = EditorGUILayout.Toggle ("Update Live", updateLive);
 
 		//		GUILayout.Label ("Base UI Color Settings", EditorStyles.boldLabel);
 
 		//		myString = EditorGUILayout.TextField ("Text Field", myString);
 		auXtraUiEditAll = EditorGUILayout.BeginToggleGroup ("XtraUI Login Panel", auXtraUiEditAll);
+		UILogin = EditorGUILayout.ObjectField ("UILogin GameObject", UILogin, typeof(UILogin)) as UILogin;
 		auXtraUiNormalColor = EditorGUILayout.ColorField ("UI Normal Color", auXtraUiNormalColor);
 		auXtraUiHighlightedColor = EditorGUILayout.ColorField ("UI Highlighted Color", auXtraUiHighlightedColor);
 		auXtraUiPressedColor = EditorGUILayout.ColorField ("UI Pressed Color", auXtraUiPressedColor);
@@ -74,5 +87,11 @@ public class AuXtraUI : EditorWindow
 		}
 		EditorGUILayout.EndToggleGroup ();
 
+		if (updateLive) {
+			UILogin.setBaseColors (auXtraUiNormalColor, auXtraUiHighlightedColor, auXtraUiPressedColor, auXtraUiBackgroundColor);
+			EditorUtility.SetDirty (UILogin);
+			SceneView.RepaintAll ();
+		}
+		this.Repaint();
 	}
 }
